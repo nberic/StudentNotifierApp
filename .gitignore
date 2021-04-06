@@ -3,6 +3,9 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+# Registry files used as cache and database for the update_id offset and registered users
+[Rr]egistry/
+
 # User-specific files
 *.rsuser
 *.suo

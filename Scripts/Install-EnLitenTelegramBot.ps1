@@ -12,7 +12,7 @@ if ([string]::IsNullOrEmpty($ServiceName))
 }
 
 $ExpectedNssmPath = "Tools\nssm-2.24\win64\nssm.exe"
-$SolutionPath = (Get-Item ..\..\).FullName
+$SolutionPath = (Get-Item ..\).FullName
 
 if (-Not (Test-Path -Path $SolutionPath\$ExpectedNssmPath))
 {
@@ -21,7 +21,7 @@ if (-Not (Test-Path -Path $SolutionPath\$ExpectedNssmPath))
     exit
 }
 
-Set-Location -Path ..\
+Set-Location -Path ..\TelegramBot
 
 if (Test-Path -Path ..\Publish)
 {
@@ -38,4 +38,4 @@ Set-Location -Path ..\Tools
 .\nssm-2.24\win64\nssm.exe set $ServiceName AppDirectory $ServiceExePath.DirectoryName
 .\nssm-2.24\win64\nssm.exe set $ServiceName Start SERVICE_DEMAND_START
 
-Set-Location -Path ..\TelegramBot\Scripts
+Set-Location -Path ..\Scripts

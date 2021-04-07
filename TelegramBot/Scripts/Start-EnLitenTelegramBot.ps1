@@ -1,2 +1,15 @@
 
-Set-Service -Name EnLitenTelegramBot -Status Running
+
+[CmdletBinding()]
+param (
+    [Parameter()]
+    [string]
+    $ServiceName
+)
+
+if ([string]::IsNullOrEmpty($ServiceName))
+{
+    $ServiceName = "EnLitenTelegramBot"
+}
+
+Start-Service -Name $ServiceName

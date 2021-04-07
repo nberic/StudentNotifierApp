@@ -1,17 +1,41 @@
 
-Set-Location -Path ..\
+[CmdletBinding()]
+param (
+    [Parameter()]
+    [string]
+    $ServiceName
+)
 
-if (Test-Path -Path .\Publish)
+if ([string]::IsNullOrEmpty($ServiceName))
 {
-    Remove-Item -Path .\Publish -Recurse
+    $ServiceName = "EnLitenTelegramBot"
 }
 
-# dotnet publish -c Debug -f net5.0 -r win10-x64 .\TelegramBot.csproj -o .\Publish\ --self-contained
-dotnet publish -o .\Publish
+$ExpectedNssmPath = "Tools\nssm-2.24\win64\nssm.exe"
+$SolutionPath = (Get-Item ..\..\).FullName
 
-$CurrentDirectoryFullName = (Get-Location).Path
+if (-Not (Test-Path -Path $SolutionPath\$ExpectedNssmPath))
+{
+    Write-Host "Nssm not found at $SolutionPath\$ExpectedNssmPath" -ForegroundColor Red
+    Write-Host "Please install it and extract on that location" -ForegroundColor Red
+    exit
+}
 
-sc.exe create EnLitenTelegramBot binPath=$CurrentDirectoryFullName\Publish\TelegramBot.exe
-sc.exe config EnLitenTelegramBot start=demand
+Set-Location -Path ..\
 
-Set-Location -Path .\Scripts
+if (Test-Path -Path ..\Publish)
+{
+    Remove-Item -Path ..\Publish -Recurse
+}
+
+dotnet publish -o ..\Publish\TelegramBot\
+
+$ServiceExePath = Get-ChildItem ..\Publish\TelegramBot\TelegramBot.exe
+
+Set-Location -Path ..\Tools
+
+.\nssm-2.24\win64\nssm.exe install $ServiceName $ServiceExePath.FullName
+.\nssm-2.24\win64\nssm.exe set $ServiceName AppDirectory $ServiceExePath.DirectoryName
+.\nssm-2.24\win64\nssm.exe set $ServiceName Start SERVICE_DEMAND_START
+
+Set-Location -Path ..\TelegramBot\Scripts

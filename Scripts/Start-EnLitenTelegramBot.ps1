@@ -12,4 +12,4 @@ if ([string]::IsNullOrEmpty($ServiceName))
     $ServiceName = "EnLitenTelegramBot"
 }
 
-Start-Service -Name $ServiceName
+Set-Service -Name $ServiceName -Status Running

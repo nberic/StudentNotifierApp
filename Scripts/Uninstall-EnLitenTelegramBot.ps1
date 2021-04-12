@@ -11,4 +11,4 @@ if ([string]::IsNullOrEmpty($ServiceName))
     $ServiceName = "EnLitenTelegramBot"
 }
 
-Remove-Service -Name $ServiceName
+sc delete $ServiceName

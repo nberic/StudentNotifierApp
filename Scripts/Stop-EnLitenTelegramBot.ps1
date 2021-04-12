@@ -12,4 +12,4 @@ if ([string]::IsNullOrEmpty($ServiceName))
     $ServiceName = "EnLitenTelegramBot"
 }
 
-Stop-Service -Name $ServiceName
+Set-Service -Name $ServiceName -Status Stopped
